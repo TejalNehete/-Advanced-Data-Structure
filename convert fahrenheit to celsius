@@ -1,0 +1,17 @@
+/*
+ * C program to convert fahrenheit to celsius using formula
+ */
+ 
+#include <stdio.h>
+int main()
+{
+    double Fahrenheit, Celsius;
+ 
+    printf ("Enter the Temperature in Fahrenheit: ");
+    scanf ("%lf", & Fahrenheit);
+ 
+    //Formula to convert fahrenheit to celsius
+    Celsius = (Fahrenheit - 32) * 5/9;
+    printf ("The Temperature in Celsius is: %.2lf\n", Celsius);
+    return 0;
+}
