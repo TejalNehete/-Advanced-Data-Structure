@@ -1,0 +1,43 @@
+#include <stdio.h>
+
+int main() {
+    // Declare an array to store the number of notes for each denomination
+    int purse[7];
+
+    // Read the number of notes for each denomination
+    printf("Enter the number of notes for each denomination:\n");
+    for (int i = 0; i < 7; i++) {
+        printf("Number of Rs. %d notes: ", (1 << i));
+        scanf("%d", &purse[i]);
+    }
+
+    // Read the amount to be paid
+    int amount;
+    printf("Enter the amount to be paid (less than Rs. 1000): ");
+    scanf("%d", &amount);
+
+    // Calculate and print the minimum number of notes required to pay the amount
+    int notesUsed[7] = {0};
+    int remainingAmount = amount;
+
+    for (int i = 6; i >= 0; i--) {
+        notesUsed[i] = remainingAmount / (1 << i);
+        if (notesUsed[i] > purse[i]) {
+            notesUsed[i] = purse[i];
+        }
+        remainingAmount -= notesUsed[i] * (1 << i);
+    }
+
+    if (remainingAmount == 0) {
+        printf("Number of notes to be used for each denomination:\n");
+        for (int i = 6; i >= 0; i--) {
+            if (notesUsed[i] > 0) {
+                printf("Rs. %d notes: %d\n", (1 << i), notesUsed[i]);
+            }
+        }
+    } else {
+        printf("Failed to Pay\n");
+    }
+
+    return 0;
+}
