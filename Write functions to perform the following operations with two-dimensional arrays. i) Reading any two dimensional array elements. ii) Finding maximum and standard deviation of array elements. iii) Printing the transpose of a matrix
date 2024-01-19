@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <math.h>
+
+// Function to read elements of a two-dimensional array
+void readArray(int arr[][100], int rows, int cols) {
+    printf("Enter the elements of the array:\n");
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            scanf("%d", &arr[i][j]);
+        }
+    }
+}
+
+// Function to find the maximum element and standard deviation of the array
+void findMaxAndStdDev(int arr[][100], int rows, int cols) {
+    int maxElement = arr[0][0];
+    double sum = 0.0, mean, stdDev;
+
+    // Finding maximum element
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            if (arr[i][j] > maxElement) {
+                maxElement = arr[i][j];
+            }
+
+            sum += arr[i][j];
+        }
+    }
+
+    // Calculating mean
+    mean = sum / (rows * cols);
+
+    // Calculating standard deviation
+    sum = 0.0;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            sum += pow(arr[i][j] - mean, 2);
+        }
+    }
+    stdDev = sqrt(sum / (rows * cols));
+
+    printf("Maximum element: %d\n", maxElement);
+    printf("Standard Deviation: %lf\n", stdDev);
+}
+
+// Function to print the transpose of a matrix
+void printTranspose(int arr[][100], int rows, int cols) {
+    printf("Transpose of the matrix:\n");
+    for (int j = 0; j < cols; j++) {
+        for (int i = 0; i < rows; i++) {
+            printf("%d\t", arr[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int rows, cols;
+
+    // Reading dimensions of the array
+    printf("Enter the number of rows and columns of the array: ");
+    scanf("%d %d", &rows, &cols);
+
+    int arr[100][100];
+
+    // Reading array elements
+    readArray(arr, rows, cols);
+
+    // Finding maximum element and standard deviation
+    findMaxAndStdDev(arr, rows, cols);
+
+    // Printing the transpose of the matrix
+    printTranspose(arr, rows, cols);
+
+    return 0;
+}
