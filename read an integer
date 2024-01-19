@@ -1,0 +1,23 @@
+#include <stdio.h>
+
+int main() {
+    // Declare an array to store 8 bits
+    int binaryArray[8];
+
+    // Read 8 bits (0s and 1s) from the user
+    printf("Enter an 8-bit binary integer: ");
+    for (int i = 0; i < 8; i++) {
+        scanf("%1d", &binaryArray[i]);
+    }
+
+    // Convert binary to decimal
+    int decimalValue = 0;
+    for (int i = 7; i >= 0; i--) {
+        decimalValue += binaryArray[i] << (7 - i);
+    }
+
+    // Print the decimal value
+    printf("Decimal value: %d\n", decimalValue);
+
+    return 0;
+}
