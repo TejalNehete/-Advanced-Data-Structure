@@ -1,0 +1,58 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+// Declare the global variable z
+int z;
+
+// A function to compare two integers based on their absolute distances from z
+int compare(const void *a, const void *b) {
+    // Get the values of the integers
+    int x1 = *(int *)a;
+    int x2 = *(int *)b;
+    // Calculate the absolute distances
+    int d1 = abs(x1 - z);
+    int d2 = abs(x2 - z);
+    // Return the difference of the distances
+    return d1 - d2;
+}
+
+// A function to sort an array of n integers in ascending order of their absolute distances from z
+void dist_sort(int x[], int n, int z) {
+    // Set the global variable z
+    z = z;
+    // Use the qsort function with the compare function as the comparator
+    qsort(&x[0], n, sizeof(int), compare);
+}
+
+// A function to print an array of n integers
+void print_array(int x[], int n) {
+    printf("{");
+    for (int i = 0; i < n; i++) {
+        printf("%d", x[i]);
+        if (i < n - 1) {
+            printf(", ");
+        }
+    }
+    printf("}\n");
+}
+
+// A main function to test the dist_sort function
+int main() {
+    // Declare an array of integers
+    int x[] = {9, 1, 12, 4, 2};
+    // Get the size of the array
+    int n = sizeof(x) / sizeof(x[0]);
+    // Declare a number z
+    z = 6;
+    // Print the original array
+    printf("Original array: ");
+    print_array(x, n);
+    // Sort the array by the absolute distances from z
+    dist_sort(x, n, z);
+    // Print the sorted array
+    printf("Sorted array: ");
+    print_array(x, n);
+    // Return 0 to indicate success
+    return 0;
+}
