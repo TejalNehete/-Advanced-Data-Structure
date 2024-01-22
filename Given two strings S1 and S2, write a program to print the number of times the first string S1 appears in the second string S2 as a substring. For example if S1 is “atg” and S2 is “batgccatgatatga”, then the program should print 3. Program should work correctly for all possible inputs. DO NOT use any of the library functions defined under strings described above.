@@ -1,0 +1,39 @@
+#include <stdio.h>
+
+// Function to count occurrences of substring in a string
+int countSubstr(char *str, char *substr) {
+    int count = 0;
+    int i, j;
+
+    for (i = 0; str[i] != '\0'; i++) {
+        j = 0;
+        // Check for the occurrence of the substring
+        while (substr[j] != '\0' && str[i + j] == substr[j])
+            j++;
+
+        // If the substring is found, increment the count
+        if (substr[j] == '\0')
+            count++;
+    }
+
+    return count;
+}
+
+int main() {
+    char S1[100], S2[100];
+
+    // Input the two strings
+    printf("Enter the first string (S1): ");
+    scanf("%s", S1);
+
+    printf("Enter the second string (S2): ");
+    scanf("%s", S2);
+
+    // Call the function to count occurrences
+    int result = countSubstr(S2, S1);
+
+    // Output the result
+    printf("The number of times '%s' appears in '%s' is: %d\n", S1, S2, result);
+
+    return 0;
+}
