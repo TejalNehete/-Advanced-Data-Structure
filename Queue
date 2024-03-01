@@ -1,0 +1,89 @@
+#include <stdio.h>
+
+typedef struct {
+    int job_id;
+    int job_size;
+} Job;
+
+#define MAX_QUEUE_SIZE 100
+
+typedef struct {
+    Job jobs[MAX_QUEUE_SIZE];
+    int front, rear; 
+    int size;
+} JobQueue;
+
+int empty(JobQueue *queue);
+void enqueue(JobQueue *queue, Job new_job);
+Job front(JobQueue *queue);
+void dequeue(JobQueue *queue);
+void roundRobin(JobQueue *queue, int time_slice);
+
+int empty(JobQueue *queue) {
+    return queue->size == 0;
+}
+
+void enqueue(JobQueue *queue, Job new_job) {
+    if (queue->size == MAX_QUEUE_SIZE) {
+        printf("Queue is full\n");
+        return;
+    }
+    if (empty(queue)) {
+        queue->front = 0;
+    }
+    queue->rear = (queue->rear + 1) % MAX_QUEUE_SIZE;
+    queue->jobs[queue->rear] = new_job;
+    queue->size++;
+}
+
+Job front(JobQueue *queue) {
+    if (empty(queue)) {
+        printf("Queue is empty\n");
+        Job empty_job = { -1, -1 };
+        return empty_job;
+    }
+    return queue->jobs[queue->front];
+}
+
+void dequeue(JobQueue *queue) {
+    if (empty(queue)) {
+        printf("Queue is empty\n");
+        return;
+    }
+    if (queue->front == queue->rear) {
+        queue->front = -1;
+        queue->rear = -1;
+    } else {
+        queue->front = (queue->front + 1) % MAX_QUEUE_SIZE;
+    }
+    queue->size--;
+}
+
+void roundRobin(JobQueue *queue, int time_slice) {
+    while (!empty(queue)) {
+        Job current_job = front(queue);
+        dequeue(queue);
+        if (current_job.job_size > time_slice) {
+            printf("Processing Job %d with time slice %d\n", current_job.job_id, time_slice);
+            current_job.job_size -= time_slice;
+            enqueue(queue, current_job);
+        } else {
+            printf("Processing Job %d to completion\n", current_job.job_id);
+        }
+    }
+}
+
+int main() {
+    JobQueue queue = { .front = -1, .rear = -1, .size = 0 }; // Initialize an empty queue
+    Job job1 = { .job_id = 1, .job_size = 8 };
+    Job job2 = { .job_id = 2, .job_size = 4 };
+    Job job3 = { .job_id = 3, .job_size = 6 };
+
+    enqueue(&queue, job1);
+    enqueue(&queue, job2);
+    enqueue(&queue, job3);
+
+    roundRobin(&queue, 5);
+
+    return 0;
+}
