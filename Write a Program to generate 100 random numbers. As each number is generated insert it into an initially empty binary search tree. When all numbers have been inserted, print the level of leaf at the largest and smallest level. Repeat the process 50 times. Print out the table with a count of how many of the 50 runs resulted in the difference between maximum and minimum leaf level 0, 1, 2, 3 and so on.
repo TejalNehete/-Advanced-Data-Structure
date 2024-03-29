@@ -1,0 +1,98 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Node structure for BST
+struct Node {
+    int data;
+    struct Node *left, *right;
+};
+
+// Function to create a new node
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+
+// Function to insert a node into BST
+struct Node* insert(struct Node* root, int data) {
+    if (root == NULL)
+        return createNode(data);
+
+    if (data < root->data)
+        root->left = insert(root->left, data);
+    else if (data > root->data)
+        root->right = insert(root->right, data);
+
+    return root;
+}
+
+// Function to find the minimum depth of BST
+int minDepth(struct Node* root) {
+    if (root == NULL)
+        return 0;
+    
+    int leftDepth = minDepth(root->left);
+    int rightDepth = minDepth(root->right);
+    
+    return 1 + ((leftDepth < rightDepth) ? leftDepth : rightDepth);
+}
+
+// Function to find the maximum depth of BST
+int maxDepth(struct Node* root) {
+    if (root == NULL)
+        return 0;
+    
+    int leftDepth = maxDepth(root->left);
+    int rightDepth = maxDepth(root->right);
+    
+    return 1 + ((leftDepth > rightDepth) ? leftDepth : rightDepth);
+}
+
+// Function to generate 100 random numbers and insert them into BST
+void generateRandomNumbersAndCalculateDepth(struct Node** root) {
+    int numbers[100];
+    
+    // Generate random numbers
+    for (int i = 0; i < 100; i++) {
+        numbers[i] = rand() % 1000; // Generate numbers between 0 to 999
+    }
+
+    // Insert numbers into BST
+    for (int i = 0; i < 100; i++) {
+        *root = insert(*root, numbers[i]);
+    }
+
+    // Calculate minimum and maximum depth
+    int min_depth = minDepth(*root);
+    int max_depth = maxDepth(*root);
+
+    // Print minimum and maximum depth
+    printf("Minimum Leaf Level: %d\n", min_depth - 1); // Subtracting 1 as root level is not counted
+    printf("Maximum Leaf Level: %d\n", max_depth - 1); // Subtracting 1 as root level is not counted
+}
+
+int main() {
+    int count_table[101] = {0}; // Count table to store the frequency of differences between max and min level
+    int runs = 50; // Number of runs
+
+    for (int i = 0; i < runs; i++) {
+        struct Node* root = NULL; // Initialize root for each run
+        printf("Run %d:\n", i + 1);
+        generateRandomNumbersAndCalculateDepth(&root); // Pass the address of root
+        int difference;
+        difference = maxDepth(root) - minDepth(root);
+        count_table[difference]++;
+        printf("\n");
+    }
+
+    // Print count table
+    printf("Count of differences between maximum and minimum leaf level:\n");
+    for (int i = 0; i <= 100; i++) {
+        if (count_table[i] > 0)
+            printf("Difference %d: %d times\n", i, count_table[i]);
+    }
+
+    return 0;
+}
