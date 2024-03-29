@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Node structure for BST
+struct Node {
+    int data;
+    struct Node *left, *right;
+};
+
+// Function to create a new node
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+
+// Function to insert a node into BST
+struct Node* insert(struct Node* root, int data) {
+    if (root == NULL)
+        return createNode(data);
+
+    if (data < root->data)
+        root->left = insert(root->left, data);
+    else if (data > root->data)
+        root->right = insert(root->right, data);
+
+    return root;
+}
+
+// Function to count the number of leaves in a binary tree
+int countLeaves(struct Node* root) {
+    if (root == NULL)
+        return 0;
+    if (root->left == NULL && root->right == NULL)
+        return 1;
+    return countLeaves(root->left) + countLeaves(root->right);
+}
+
+int main() {
+    // Sample BST to test the program
+    struct Node* root = NULL;
+    int numbers[10] = {50, 30, 70, 20, 40, 60, 80, 10, 25, 35};
+
+    // Insert numbers into BST
+    for (int i = 0; i < 10; i++) {
+        root = insert(root, numbers[i]);
+    }
+
+    // Count the number of leaves
+    int leaves = countLeaves(root);
+
+    printf("Number of leaves in the binary tree: %d\n", leaves);
+
+    return 0;
+}
