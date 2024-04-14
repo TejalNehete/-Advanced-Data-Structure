@@ -1,0 +1,72 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_CITIES 100
+
+// Function to create a graph using adjacency matrix
+void createGraph(int cities[MAX_CITIES][MAX_CITIES], int n) {
+    printf("Enter the adjacency matrix for the graph:\n");
+    for (int i = 0; i < n; i++) {
+        printf("Enter row %d (separate elements with space): ", i + 1);
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &cities[i][j]);
+        }
+    }
+}
+
+// Depth First Search (DFS) for traversal
+void DFS(int cities[MAX_CITIES][MAX_CITIES], int visited[MAX_CITIES], int n, int start) {
+    visited[start] = 1;
+    printf("%d ", start + 1); // Printing the node
+    for (int i = 0; i < n; i++) {
+        if (cities[start][i] == 1 && !visited[i]) {
+            DFS(cities, visited, n, i); // Recursively visit adjacent nodes
+        }
+    }
+}
+
+// Breadth First Search (BFS) for traversal
+void BFS(int cities[MAX_CITIES][MAX_CITIES], int visited[MAX_CITIES], int n, int start) {
+    int queue[MAX_CITIES], front = -1, rear = -1;
+    queue[++rear] = start;
+    visited[start] = 1;
+    while (front != rear) {
+        int currentNode = queue[++front];
+        printf("%d ", currentNode + 1); // Printing the node
+        for (int i = 0; i < n; i++) {
+            if (cities[currentNode][i] == 1 && !visited[i]) {
+                queue[++rear] = i;
+                visited[i] = 1;
+            }
+        }
+    }
+}
+
+int main() {
+    int cities[MAX_CITIES][MAX_CITIES], n, startNode;
+    int visited[MAX_CITIES] = {0};
+
+    printf("Enter the number of cities (maximum %d): ", MAX_CITIES);
+    scanf("%d", &n);
+
+    createGraph(cities, n);
+
+    printf("Enter the starting city node (1 to %d): ", n);
+    scanf("%d", &startNode);
+    startNode--; // Adjusting for zero-based indexing
+
+    printf("Nodes reachable from city %d using DFS: ", startNode + 1);
+    DFS(cities, visited, n, startNode);
+
+    // Reset visited array
+    for (int i = 0; i < MAX_CITIES; i++) {
+        visited[i] = 0;
+    }
+
+    printf("\nNodes reachable from city %d using BFS: ", startNode + 1);
+    BFS(cities, visited, n, startNode);
+
+    printf("\n");
+
+    return 0;
+}
